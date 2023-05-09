@@ -153,33 +153,7 @@ const init = async () => {
 }
 init();
 
-/*
-General Notes from Profitable Flashloans course
 
-TRUFFLE: 
-Truffle is a smart contract framework
-Use truffle init . to initialize a truffle project in the current directory
-It will add a contracts folder .. this is where we put our smart contracts
-Migrations folder - We will write our migration file which will tell truffle how to deploy to ethereum blockchain
-Tests folder lets us write some tests 
-the truffle-config file lets us tweak the truggle config
-after deploying smart contract truffle has json files in the build subdirectory that you can check out
-there will be one for the smart contract you deployed which will have its Abi and it will show the address inside the networks key
-
-FLASHLOANS
--flashloan smart contract will do arb
--dydx doesnt have flashloans explicity but implicity yes since it doesnt check balance until transaction completion
--dydx use withdraw action to borrow a flashloan, call a function on the same sc, use a deposit function to return flashloan, dydx doesnt check balances until the very end of the transaction
--moneylegos good npm package - https://www.npmjs.com/package/@studydefi/money-legos
--need to get solidity pointers to addresses of uniswap and kyber pair contracts for whichever tokens we are interacting with
--need v2router.sol contracts 
--always look at documentation
-
-DEPLOYING FLASHLOAN SC TO MAINNET
-1. Configure Truffle to deploy to mainnet npm install @truffle/hdwallet-provider in the root of the project - this allows us to add our private keys to the deployment system of truffle
-2. Create a migration file to tell truffle how to deploy our flashloan
-3. We will run the migration - js files that help you deploy contracts to the ethereum network
-after setting everything up deploy via command truffle migrate --network mainnet --reset
 
 
 
