@@ -39,7 +39,7 @@ To get started with the MEV Bot with Flash Loans, follow these steps:
 5. Run the MEV Bot:
 - Start the MEV Bot by running the main script:
   ```
-  node index.js
+  node run-arbitrage.js
   ```
 - The bot will initialize, connect to the Ethereum network, and execute the configured MEV strategies.
 
