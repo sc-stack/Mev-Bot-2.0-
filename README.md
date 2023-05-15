@@ -1,4 +1,4 @@
-# MEV Bot with Flash Loans
+# MEV Bot with Flash Loans (Note original version got deleted) - 
 
 The MEV Bot with Flash Loans is a software application designed to leverage flash loans in decentralized finance (DeFi) protocols to extract miner extractable value. It uses flash loans to perform profitable arbitrage opportunities and other MEV strategies across various DeFi platforms.
 
