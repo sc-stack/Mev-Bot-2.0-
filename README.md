@@ -1,4 +1,4 @@
-# MEV Bot - 
+# MEV Bot 
 
 The MEV Bot is a software application designed to leverage flash loans in decentralized finance (DeFi) protocols to extract miner extractable value. It uses flash loans to perform profitable arbitrage opportunities and other MEV strategies across various DeFi platforms.
 
