@@ -4,8 +4,9 @@ The MEV Bot is a software application designed to leverage flash loans in decent
 
 ## Features
 
-- Flash Loan Integration: Utilizes flash loans to borrow large amounts of assets temporarily, enabling the execution of high-value transactions without requiring collateral.
-- Arbitrage Opportunities: Identifies price discrepancies and executes trades across decentralized exchanges to capture profitable arbitrage opportunities.
+- Flash Loan Integration: Utilizes flash loans to borrow large amounts of assets temporarily, enabling the execution of high-value transactions without requiring collateral. We do this via the Dy/dx exchange, which although does not natively support flashloans, enables you to withdraw $ from their exchange, call a function, and
+- repay this amount all atomically within one transaction. We will be leveraging this for a "flashloan", compared to traditional lending protcols such as AAVE. 
+- Arbitrage Opportunities: Identifies price discrepancies and executes trades across decentralized exchanges (Kyber, Uniswap) to capture profitable arbitrage opportunities.
 - MEV Extraction: Exploits timing and ordering advantages to extract maximum value from DeFi protocols, leveraging flash loans to optimize profit potential.
 - Automated Execution: Implements algorithms and smart contract interactions for automatic and efficient execution of MEV strategies.
 - Risk Management: Includes risk management mechanisms to assess and mitigate potential risks associated with flash loans and volatile market conditions.
@@ -19,6 +20,7 @@ The MEV Bot is a software application designed to leverage flash loans in decent
 - Flash Loan Protocols: Integration with popular flash loan protocols such as Aave, dYdX, or MakerDAO.
 - Decentralized Exchanges (DEXs): Integration with popular DEXs like Uniswap, SushiSwap, or Curve for executing trades and capturing arbitrage opportunities.
 - Data Providers: Integration with external data providers to fetch real-time market data and optimize trading strategies.
+- Truffle - Used for deploying and managing smart contracts
 
 ## Getting Started
 
