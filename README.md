@@ -27,14 +27,14 @@ The MEV Bot is a software application designed to leverage flash loans in decent
 To get started with the MEV Bot with Flash Loans, follow these steps:
 
 1. Clone the repository:
-
+https://github.com/sc-stack/Mev-Bot-2.0-.git
 
 2. Install the dependencies:
-
+npm install
 
 3. Configure the environment variables:
 - Create a `.env` file in the root directory.
-- Set the necessary environment variables, including Ethereum provider URLs, API keys for data providers, and any other required configurations.
+- Set the necessary environment variables, INFURA_URL, and PRIVATE_KEY. Don't use your main wallet
 
 4. Optimize your strategy 
 
@@ -45,8 +45,6 @@ To get started with the MEV Bot with Flash Loans, follow these steps:
   ```
 - The bot will initialize, connect to the Ethereum network, and execute the configured MEV strategies.
 
-6. Monitor and analyze results:
-- Utilize the reporting and analytics features to monitor the bot's performance, track profits, and assess the effectiveness of the MEV strategies.
 
 ## Security Considerations
 
