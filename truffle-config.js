@@ -61,7 +61,7 @@ module.exports = {
    */
 
   networks: {
-
+// could added an array of private keys
     mainnet: {
       provider: () => new HDWalletProvider(
         process.env.PRIVATE_KEY,

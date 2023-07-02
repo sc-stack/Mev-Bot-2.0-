@@ -5,18 +5,20 @@ pragma experimental ABIEncoderV2;
 
 //use other smart contracts defined by this npm package
 import "@studydefi/money-legos/dydx/contracts/DydxFlashloanBase.sol";
+// interface of kyber provided by money legos package
 import "@studydefi/money-legos/dydx/contracts/ICallee.sol";
 //The Kyber Contract
 import {KyberNetworkProxy as IKyberNetworkProxy} from "@studydefi/money-legos/kyber/contracts/KyberNetworkProxy.sol";
 
-//allows us to interact with an ERC-20 contract
+//allows us to interact with an ERC-20 contract - import these interfaces
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./IUniswapV2Router02.sol";
 import "./IWeth.sol";
 
-//smart contract inherits from these two other smart contracts
+//smart contract inherits from these two other smart contracts allows us to start w built in functionality
+// call function and initiate flashloan
 contract Flashloan is ICallee, DydxFlashloanBase {
-    //enum is an option
+    //enum is an option - direction of the arbitrage
     enum Direction {
         KyberToUniswap,
         UniswapToKyber
@@ -28,6 +30,7 @@ contract Flashloan is ICallee, DydxFlashloanBase {
 
     event NewArbitrage(Direction direction, uint256 profit, uint256 date);
 
+    // declare pointer to these smart contracts
     IKyberNetworkProxy kyber;
     IUniswapV2Router02 uniswap;
     IWeth weth;
@@ -38,6 +41,8 @@ contract Flashloan is ICallee, DydxFlashloanBase {
     //allows us to save some gas
     address constant KYBER_ETH_ADDRESS =
         0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+
+    // constructor called when sc deployed to the blockchain
 
     constructor(
         address kyberAddress,
@@ -56,7 +61,7 @@ contract Flashloan is ICallee, DydxFlashloanBase {
     //will be called once we withdraw tokens from dydx - we will be doing arbitrage here
     // This is the function that will be called postLoan
     // i.e. Encode the logic to handle your flashloaned funds here
-    //we need to decode the arbinfo info struct which will be sent in as the arb info struct hence why we decode it
+    //we need to decode the arbinfo info struct which will be sent in as the bytes - doesnt use struct name bytes allows for flexiblity
     function callFunction(
         address sender,
         Account.Info memory account,
@@ -68,20 +73,22 @@ contract Flashloan is ICallee, DydxFlashloanBase {
         //balanceof checks the current accounts balances for that token as specified in the ERC20 standard
         uint256 balanceDai = dai.balanceOf(address(this));
 
-        //buy on kyber sell on uniswap
+        // Arb 1: buy on kyber sell on uniswap
         if (arbInfo.direction == Direction.KyberToUniswap) {
             //Buy Eth on Kyber
-            //sets our allowance approved to spend dai with as balanceDai
+            //sets our allowance approved to spend dai with as balanceDai approve to be spent by kyber
             dai.approve(address(kyber), balanceDai);
             //gets the token conversion rate without any fees -
+            // takes input to dai and ether and the balanceDai
             (uint256 expectedRate, ) = kyber.getExpectedRate(
                 dai,
                 IERC20(KYBER_ETH_ADDRESS),
                 balanceDai
             );
+            // input token balance and excpcted Rate
             kyber.swapTokenToEther(dai, balanceDai, expectedRate);
             //Sell ETH on uniswap
-            //specify a path - aka an array of addresses
+            //specify a path - aka an array of addresses can go from token a -> b -> c good for code resuability in the future
             address[] memory path = new address[](2);
             path[0] = address(weth);
             path[1] = address(dai);
@@ -93,7 +100,7 @@ contract Flashloan is ICallee, DydxFlashloanBase {
             );
             //call function of uniswap to do trades
             //.value is syntax for sending ether to uniswap
-            //deadline is now useful if you are sending a transaction from outside the blockchain
+            //deadline parameter is now useful if you are sending a transaction from outside the blockchain
             //swaps an exact amount of ETH for as many output tokens as possible along the route determined by the path
             //now is an alias for block.timestamp
             uniswap.swapExactETHForTokens.value(address(this).balance)(
@@ -145,12 +152,13 @@ contract Flashloan is ICallee, DydxFlashloanBase {
 
         //calculate the profit - aka the difference between the dai balance of this smart contract and repay amount
         uint256 profit = dai.balanceOf(address(this)) - arbInfo.repayAmount;
+        // send profit to the beneficiary address
         dai.transfer(beneficiary, profit);
         //emit an event to describe the arb that just happened
         emit NewArbitrage(arbInfo.direction, profit, now);
     }
 
-    //address of dydx, address of token we want to borrow and then the amount
+    //address of dydx, address of token we want to borrow and then the amount, also the direction
     function initiateFlashloan(
         address _solo,
         address _token,
@@ -175,14 +183,14 @@ contract Flashloan is ICallee, DydxFlashloanBase {
 
         //withdraw action is borrowing the token from dydx
         operations[0] = _getWithdrawAction(marketId, _amount);
-        //this is where we do the arbitrage
+        //this is where we do the arbitrage - the call action do arbtragry sc execution
         operations[1] = _getCallAction(
-            // Encode MyCustomData for callFunction
+            // Define struct ArbInfo and pass
             abi.encode(
                 ArbInfo({direction: _direction, repayAmount: repayAmount})
             )
         );
-        //when we pay back the flashloan to dydx
+        //when we pay back the flashloan to dydx - deposit
         operations[2] = _getDepositAction(marketId, repayAmount);
 
         Account.Info[] memory accountInfos = new Account.Info[](1);
