@@ -35,7 +35,7 @@ npm install
 - Create a `.env` file in the root directory.
 - Set the necessary environment variables, INFURA_URL, and PRIVATE_KEY. Don't use your main wallet
 
-4. Optimize your strategy 
+4. Optimize your strategy (This is the fun part :)
 
 5. Run the MEV Bot:
 - Start the MEV Bot by running the main script:
